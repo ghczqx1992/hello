@@ -1,0 +1,68 @@
+############################################################  #
+# 配置数据源信息
+#  ############################################################
+
+
+spring:
+ datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.64.57.4:3306/foodie-shop?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: zqx19920513
+ devtools:
+   restart:
+     additional-paths: classpath:src/main/java
+ rabbitmq:
+   host: 172.16.28.166
+   port: 5672
+   username: guest
+   password: 123456
+   publisher-returns: true
+   listener:
+     simple:
+       acknowledge-mode: manual #采用手动应答
+       concurrency: 1 #指定最小的消费者数量
+       max-concurrency: 1 #指定最大的消费数量
+       retry:
+         enabled: true #是否支持重试
+   template:
+     mandatory: true
+   publisher-confirm-type: correlated
+
+ hikari:
+    connection-timeout:  30000	#  等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQ
+    minimum-idle:  5	#  最小连接数
+    maximum-pool-size:  20	#  最大连接数
+    auto-commit:  true	#  自动提交
+    pool-name: DateSourceHikariCP
+    idle-timeout:  600000	#  连接超时的最大时长（毫秒），超时则被释放（retired），默认:10分钟 pool-name:  DateSourceHikariCP		#  连接池名字
+    max-lifetime:  1800000	#  连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认:30分钟
+    connection-test-query:  SELECT  1
+
+
+############################################################  #
+#  mybatis  配置
+#  ############################################################
+mybatis:
+  type-aliases-package:  com.imooc.pojo	#  所有POJO类所在包路径
+  mapper-locations:  classpath:mapper/*.xml	#  mapper映射文件
+
+mapper:
+  mappers: com.imooc.my.mapper.MyMapper
+  not-empty: false #在数据库操作的时候，判断表达式 username!=null, 是否追加username!=''
+  identify: MYSQL #数据库方言
+
+
+server:
+  port: 9090
+  tomcat:
+    uri-encoding: UTF-8
+  max-http-header-size: 80KB
+
+order:
+  queue_name: order_queue_name
+  queue_name1: order_queue_name1
+  exchange_name: order_exchange_name
+  routing_key_name: order_routing_key_name
+  routing_key_name1: order_routing_key_name1
