@@ -30,6 +30,7 @@ class DemoApplicationTests {
     public void testDelayQueuePerMessageTTL() throws InterruptedException {
         for (int i = 1; i <= 3; i++) {
         	int b=3/0;
+        	//
         	int a=1/0;
             long expiration = i * 1000;
             rabbitTemplate.convertAndSend("delay_queue_msg_ttl_name",
